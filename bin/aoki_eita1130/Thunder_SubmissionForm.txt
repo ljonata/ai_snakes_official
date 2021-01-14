@@ -1,0 +1,8 @@
+Author: Eita Aoki
+e-mail: aoki.eita1130@gmail.com
+Team Name: Thunder
+Brief description:
+ÅEoutline
+ alpha-beta
+ÅEspecial evaluation
+ if my snake is in a place where the distance to the wall is two and opponent snake is next to the wall and my snake can lock the enemy in with my body,my ai evaluate it high score.
