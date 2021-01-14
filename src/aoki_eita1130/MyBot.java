@@ -13,14 +13,11 @@ import snakes.Snake;
 /**
  * Sample implementation of snake bot
  */
-public class Aoki_eita1130 implements Bot {
-	//どうやら1ゲームごとにBotが初期化されたりはしないらしい
-	//なのでturnをインクリメントして覚えたりとかもできないので、
-	//Bot直下になるべく変数はおかないほうがよさげ
+public class MyBot implements Bot {
 
 	static boolean useMyPrint=false;
 
-	static int superWinner=-1;//明示的にapple量で買っている状態
+	static int superWinner=-1;
 
 	static void myprint(Object o) {
 		if(useMyPrint)System.err.print(o);
@@ -40,23 +37,23 @@ public class Aoki_eita1130 implements Bot {
 		return (co.x==x&&co.y==y) ;
 	}
 	static class HashEntry{
-		//long HashVal;		// ハッシュ値
-		Direction Best;			// 前回の反復深化での最善手
-		Direction Second;			// 前々回以前の反復深化での最善手
-		long value;			// αβ探索で得た局面の評価値
-		FLAG flag;			// αβ探索で得た値が、局面の評価値そのものか、上限値か下限値か
-		//int Tesu;			// αβ探索を行った際の手数
-		int depth;		// αβ探索を行った際の深さ
-		//short remainDepth;	// αβ探索を行った際の残り深さ
+		//long HashVal;		// 
+		Direction Best;			// 
+		Direction Second;			// 
+		long value;			// 
+		FLAG flag;			// 
+		//int Tesu;			// 
+		int depth;		// 
+		//short remainDepth;	// 
 		public HashEntry() {};
 	}
 	static Map<Long, HashEntry> HashTbl = new HashMap<>();
-	//各ターンで初期化するもの
+	
 	static void initTurn(Coordinate apple) {
 		HashTbl.clear();
-		Aoki_eita1130.startTime=System.currentTimeMillis();
-		Aoki_eita1130.akirame=false;
-		Aoki_eita1130.orgApple=new Coordinate(apple.x,apple.y);
+		MyBot.startTime=System.currentTimeMillis();
+		MyBot.akirame=false;
+		MyBot.orgApple=new Coordinate(apple.x,apple.y);
 	}
 
 	static class Hash{
@@ -68,15 +65,15 @@ public class Aoki_eita1130 implements Bot {
 		static final long[][] apple;
 		static {
 			myprintln("Hash init()");
-			myBody=new long[Aoki_eita1130.mazeSize.y][Aoki_eita1130.mazeSize.x];
-			oppBody=new long[Aoki_eita1130.mazeSize.y][Aoki_eita1130.mazeSize.x];
-			myHead=new long[Aoki_eita1130.mazeSize.y][Aoki_eita1130.mazeSize.x];
-			oppHead=new long[Aoki_eita1130.mazeSize.y][Aoki_eita1130.mazeSize.x];
-			apple=new long[Aoki_eita1130.mazeSize.y][Aoki_eita1130.mazeSize.x];
+			myBody=new long[MyBot.mazeSize.y][MyBot.mazeSize.x];
+			oppBody=new long[MyBot.mazeSize.y][MyBot.mazeSize.x];
+			myHead=new long[MyBot.mazeSize.y][MyBot.mazeSize.x];
+			oppHead=new long[MyBot.mazeSize.y][MyBot.mazeSize.x];
+			apple=new long[MyBot.mazeSize.y][MyBot.mazeSize.x];
 
 
-			for(int y = 0; y< Aoki_eita1130.mazeSize.y; y++) {
-				for(int x = 0; x< Aoki_eita1130.mazeSize.x; x++) {
+			for(int y = 0; y< MyBot.mazeSize.y; y++) {
+				for(int x = 0; x< MyBot.mazeSize.x; x++) {
 					myBody[y][x]=rnd.nextLong();
 					oppBody[y][x]=rnd.nextLong();
 					myHead[y][x]=rnd.nextLong();
@@ -88,9 +85,9 @@ public class Aoki_eita1130 implements Bot {
 		}
 	}
 	enum FLAG{
-		EXACTLY_VALUE,		// 値は局面の評価値そのもの
-		LOWER_BOUND,		// 値は局面の評価値の下限値(val>=β)
-		UPPER_BOUND			// 値は局面の評価値の上限値(val<=α)
+		EXACTLY_VALUE,		
+		LOWER_BOUND,		
+		UPPER_BOUND			
 	}
 	class BB{
 		int[]bit;
@@ -237,9 +234,9 @@ public class Aoki_eita1130 implements Bot {
 
 			Coordinate newHead=head.moveTo(d);
 			boolean grow=false;
-			boolean zaoriku=false;//appleの復活フラグ
+			boolean zaoriku=false;//appleã�®å¾©æ´»ãƒ•ãƒ©ã‚°
 			if(player==1&&this.apple==null&&newHead.equals(this.snakes[(player+1)%2].getHead())) {
-				this.apple=newHead;//同時に動いてるのに先手がアップルとったらなくなっちゃうの防ぐ
+				this.apple=newHead;//å�Œæ™‚ã�«å‹•ã�„ã�¦ã‚‹ã�®ã�«å…ˆæ‰‹ã�Œã‚¢ãƒƒãƒ—ãƒ«ã�¨ã�£ã�Ÿã‚‰ã�ªã��ã�ªã�£ã�¡ã‚ƒã�†ã�®é˜²ã��
 				zaoriku=true;
 			}
 			//myprintln("move newHead "+newHead.x+" "+newHead.y);
@@ -263,23 +260,23 @@ public class Aoki_eita1130 implements Bot {
 
 
 			if(player==0) {
-				this.hash^=Hash.myBody[head.y][head.x];//もとのヘッドはボディ扱いに
-				this.hash^=Hash.myHead[head.y][head.x];//もとのヘッドをhashのヘッドから抜く
-				this.hash^=Hash.myHead[newHead.y][newHead.x];//新しいヘッドを追加
+				this.hash^=Hash.myBody[head.y][head.x];//ã‚‚ã�¨ã�®ãƒ˜ãƒƒãƒ‰ã�¯ãƒœãƒ‡ã‚£æ‰±ã�„ã�«
+				this.hash^=Hash.myHead[head.y][head.x];//ã‚‚ã�¨ã�®ãƒ˜ãƒƒãƒ‰ã‚’hashã�®ãƒ˜ãƒƒãƒ‰ã�‹ã‚‰æŠœã��
+				this.hash^=Hash.myHead[newHead.y][newHead.x];//æ–°ã�—ã�„ãƒ˜ãƒƒãƒ‰ã‚’è¿½åŠ 
 				if(!grow) {
-					this.hash^=Hash.myBody[tail.y][tail.x];//もとのしっぽはボディから抜く
+					this.hash^=Hash.myBody[tail.y][tail.x];//ã‚‚ã�¨ã�®ã�—ã�£ã�½ã�¯ãƒœãƒ‡ã‚£ã�‹ã‚‰æŠœã��
 				}
 			}else {
-				this.hash^=Hash.oppBody[head.y][head.x];//もとのヘッドはボディ扱いに
-				this.hash^=Hash.oppHead[head.y][head.x];//もとのヘッドをhashのヘッドから抜く
-				this.hash^=Hash.oppHead[newHead.y][newHead.x];//新しいヘッドを追加
+				this.hash^=Hash.oppBody[head.y][head.x];//ã‚‚ã�¨ã�®ãƒ˜ãƒƒãƒ‰ã�¯ãƒœãƒ‡ã‚£æ‰±ã�„ã�«
+				this.hash^=Hash.oppHead[head.y][head.x];//ã‚‚ã�¨ã�®ãƒ˜ãƒƒãƒ‰ã‚’hashã�®ãƒ˜ãƒƒãƒ‰ã�‹ã‚‰æŠœã��
+				this.hash^=Hash.oppHead[newHead.y][newHead.x];//æ–°ã�—ã�„ãƒ˜ãƒƒãƒ‰ã‚’è¿½åŠ 
 				if(!grow) {
-					this.hash^=Hash.oppBody[tail.y][tail.x];//もとのしっぽはボディから抜く
+					this.hash^=Hash.oppBody[tail.y][tail.x];//ã‚‚ã�¨ã�®ã�—ã�£ã�½ã�¯ãƒœãƒ‡ã‚£ã�‹ã‚‰æŠœã��
 				}
 			}
 
-			if(grow&&!zaoriku) {//復活なしでappleが消えた
-				this.hash^=Hash.apple[newHead.y][newHead.x];//appleを消す
+			if(grow&&!zaoriku) {//å¾©æ´»ã�ªã�—ã�§appleã�Œæ¶ˆã�ˆã�Ÿ
+				this.hash^=Hash.apple[newHead.y][newHead.x];//appleã‚’æ¶ˆã�™
 			}
 
 		}
@@ -293,8 +290,8 @@ public class Aoki_eita1130 implements Bot {
 
 		}
 
-		//ターン経過と共にしっぽを削る。playerはvirtualDirection方向に移動した場所にいると仮定して計算する
-		//今いる場所が領域を分断している場合に面積を正しく計算できないため
+		//ã‚¿ãƒ¼ãƒ³çµŒé�Žã�¨å…±ã�«ã�—ã�£ã�½ã‚’å‰Šã‚‹ã€‚playerã�¯virtualDirectionæ–¹å�‘ã�«ç§»å‹•ã�—ã�Ÿå ´æ‰€ã�«ã�„ã‚‹ã�¨ä»®å®šã�—ã�¦è¨ˆç®—ã�™ã‚‹
+		//ä»Šã�„ã‚‹å ´æ‰€ã�Œé ˜åŸŸã‚’åˆ†æ–­ã�—ã�¦ã�„ã‚‹å ´å�ˆã�«é�¢ç©�ã‚’æ­£ã�—ã��è¨ˆç®—ã�§ã��ã�ªã�„ã�Ÿã‚�
 		public RetVal getRemoveS(int player,Direction virtualDirection) {
 			RetVal ret=new RetVal();
 			//myprintln("getRemoveS player "+player+" isEater "+this.appleEater);
@@ -316,7 +313,7 @@ public class Aoki_eita1130 implements Bot {
 			BB posbb=new BB();
 
 			Coordinate posCo=this.snakes[player].getHead();
-			if(virtualDirection!=null)posCo=posCo.moveTo(virtualDirection);//SnakeではなくCoordinateのmotveToを使うことで、Snakeを破壊しない
+			if(virtualDirection!=null)posCo=posCo.moveTo(virtualDirection);//Snakeã�§ã�¯ã�ªã��Coordinateã�®motveToã‚’ä½¿ã�†ã�“ã�¨ã�§ã€�Snakeã‚’ç ´å£Šã�—ã�ªã�„
 			posbb.set(posCo);
 
 			boolean appleTouch=false;
@@ -326,37 +323,37 @@ public class Aoki_eita1130 implements Bot {
 				for(Snake tsnake:tmpSnakes) {
 					if(!tsnake.body.isEmpty()) {
 						Coordinate tail=tsnake.body.pollLast();
-						//posbb.bit[tail.y]&=~(1<<tail.x);//ここallboardかもしれない
+						//posbb.bit[tail.y]&=~(1<<tail.x);//ã�“ã�“allboardã�‹ã‚‚ã�—ã‚Œã�ªã�„
 						allboard.bit[tail.y]&=~(1<<tail.x);
 					}
 				}
 				//posbb.print();
 				if(!appleTouch&&posbb.isBit(this.apple)) {ret.appleDistance=cnt;appleTouch=true;}
-				if(!orgAppleTouch&& posbb.isBit(Aoki_eita1130.orgApple)) {ret.orgAppleDistance=cnt;orgAppleTouch=true;}
+				if(!orgAppleTouch&& posbb.isBit(MyBot.orgApple)) {ret.orgAppleDistance=cnt;orgAppleTouch=true;}
 				boolean moved=false;
 				BB nposbb=new BB();
-				for (int y = 0; y < Aoki_eita1130.mazeSize.y; ++y ) {
+				for (int y = 0; y < MyBot.mazeSize.y; ++y ) {
 					nposbb.bit[y]|=posbb.bit[y]<<1;
 					nposbb.bit[y]|=posbb.bit[y]>>1;
 					if(y>=1) {
 						nposbb.bit[y]|=posbb.bit[y-1];
 					}
-					if(y<= Aoki_eita1130.mazeSize.y-2) {
+					if(y<= MyBot.mazeSize.y-2) {
 						nposbb.bit[y]|=posbb.bit[y+1];
 					}
-					nposbb.bit[y]&=nposbb.filter;//filterは本当はstaticにしたい
+					nposbb.bit[y]&=nposbb.filter;//filterã�¯æœ¬å½“ã�¯staticã�«ã�—ã�Ÿã�„
 					nposbb.bit[y]&=~allboard.bit[y];
 					if((nposbb.bit[y]&~posbb.bit[y])!=0)moved=true;
 				}
 				if(!moved)break;
-				for (int y = 0; y < Aoki_eita1130.mazeSize.y; ++y ) {
+				for (int y = 0; y < MyBot.mazeSize.y; ++y ) {
 					posbb.bit[y]|=nposbb.bit[y];
 				}
 
 			}
 			int retS=0;
 
-			for (int y = 0; y < Aoki_eita1130.mazeSize.y; ++y ) {
+			for (int y = 0; y < MyBot.mazeSize.y; ++y ) {
 				int tmpS=Long.bitCount( posbb.bit[y]);
 				//myprintln("tmpS\t"+tmpS);
 				retS+=tmpS;
@@ -368,7 +365,7 @@ public class Aoki_eita1130 implements Bot {
 			return ret;
 		}
 
-		//二人の動きを考慮した面積などを計算する
+		//äºŒäººã�®å‹•ã��ã‚’è€ƒæ…®ã�—ã�Ÿé�¢ç©�ã�ªã�©ã‚’è¨ˆç®—ã�™ã‚‹
 		public RetVal[] getWS(int kijun_player,Direction virtualDirection) {
 			//myprintln("getWS");
 			RetVal[] rets= {new RetVal(),new RetVal()};
@@ -395,7 +392,7 @@ public class Aoki_eita1130 implements Bot {
 
 			Coordinate[] posCo= {this.snakes[0].getHead(),this.snakes[1].getHead()};
 
-			if(virtualDirection!=null)posCo[kijun_player]=posCo[kijun_player].moveTo(virtualDirection);//SnakeではなくCoordinateのmotveToを使うことで、Snakeを破壊しない
+			if(virtualDirection!=null)posCo[kijun_player]=posCo[kijun_player].moveTo(virtualDirection);//Snakeã�§ã�¯ã�ªã��Coordinateã�®motveToã‚’ä½¿ã�†ã�“ã�¨ã�§ã€�Snakeã‚’ç ´å£Šã�—ã�ªã�„
 
 			for(int i=0;i<2;i++) {
 				posbbs[i].set(posCo[i]);
@@ -418,21 +415,21 @@ public class Aoki_eita1130 implements Bot {
 					if(!appleTouch[nowPlayer]&&posbbs[nowPlayer].isBit(this.apple)) {rets[nowPlayer].appleDistance=cnt;appleTouch[nowPlayer]=true;}
 					boolean moved=false;
 					BB nposbb=new BB();
-					for (int y = 0; y < Aoki_eita1130.mazeSize.y; ++y ) {
+					for (int y = 0; y < MyBot.mazeSize.y; ++y ) {
 						nposbb.bit[y]|=posbbs[nowPlayer].bit[y]<<1;
 						nposbb.bit[y]|=posbbs[nowPlayer].bit[y]>>1;
 						if(y>=1) {
 							nposbb.bit[y]|=posbbs[nowPlayer].bit[y-1];
 						}
-						if(y<= Aoki_eita1130.mazeSize.y-2) {
+						if(y<= MyBot.mazeSize.y-2) {
 							nposbb.bit[y]|=posbbs[nowPlayer].bit[y+1];
 						}
-						nposbb.bit[y]&=nposbb.filter;//filterは本当はstaticにしたい
+						nposbb.bit[y]&=nposbb.filter;//filterã�¯æœ¬å½“ã�¯staticã�«ã�—ã�Ÿã�„
 						nposbb.bit[y]&=~allboard.bit[y];
 						if((nposbb.bit[y]&~posbbs[nowPlayer].bit[y])!=0)moved=true;
 					}
 					if(!moved) {notmoveCnt++;continue;}
-					for (int y = 0; y < Aoki_eita1130.mazeSize.y; ++y ) {
+					for (int y = 0; y < MyBot.mazeSize.y; ++y ) {
 						posbbs[nowPlayer].bit[y]|=nposbb.bit[y];
 						allboard.bit[y]|=nposbb.bit[y];
 					}
@@ -444,7 +441,7 @@ public class Aoki_eita1130 implements Bot {
 
 			for(int i=0;i<2;i++) {
 				int retS=0;
-			for (int y = 0; y < Aoki_eita1130.mazeSize.y; ++y ) {
+			for (int y = 0; y < MyBot.mazeSize.y; ++y ) {
 				int tmpS=Long.bitCount( posbbs[i].bit[y]);
 				retS+=tmpS;
 			}
@@ -604,7 +601,7 @@ RetVal[]bestInfos=null;
 			}
 			return true;
 		}
-		if(mySnakeHead.x== Aoki_eita1130.mazeSize.x- 2&&oppSnakeHead.x== Aoki_eita1130.mazeSize.x- 1) {
+		if(mySnakeHead.x== MyBot.mazeSize.x- 2&&oppSnakeHead.x== MyBot.mazeSize.x- 1) {
 			int step=(mySnakeHead.y>oppSnakeHead.y)?1:-1;
 			for(int i=0;i<Math.abs(mySnakeHead.y-oppSnakeHead.y)+1;i++) {
 				int oy=oppSnakeHead.y+i*step;
@@ -620,7 +617,7 @@ RetVal[]bestInfos=null;
 			}
 			return true;
 		}
-		if(mySnakeHead.y== Aoki_eita1130.mazeSize.y-2&&oppSnakeHead.y== Aoki_eita1130.mazeSize.y-1) {
+		if(mySnakeHead.y== MyBot.mazeSize.y-2&&oppSnakeHead.y== MyBot.mazeSize.y-1) {
 			int step=(mySnakeHead.x>oppSnakeHead.x)?1:-1;
 			for(int i=0;i<Math.abs(mySnakeHead.x-oppSnakeHead.x)+1;i++) {
 				int ox=oppSnakeHead.x+i*step;
@@ -652,14 +649,14 @@ RetVal[]bestInfos=null;
 		RetVal myInfo=null;
 		RetVal oppInfo=null;
 		boolean isJoban=tmpMaze.snakes[0].body.size()+tmpMaze.snakes[1].body.size()<=20;
-		if(isJoban) {//序盤
-//			myInfo=getBestInfo(tmpMaze,player);//面積雑にしようとしたけど端でおいこむやつに負けるのでダメ
+		if(isJoban) {//åº�ç›¤
+//			myInfo=getBestInfo(tmpMaze,player);//é�¢ç©�é›‘ã�«ã�—ã‚ˆã�†ã�¨ã�—ã�Ÿã�‘ã�©ç«¯ã�§ã�Šã�„ã�“ã‚€ã‚„ã�¤ã�«è² ã�‘ã‚‹ã�®ã�§ãƒ€ãƒ¡
 //			oppInfo=getBestInfo(tmpMaze,oppId);
 			RetVal[] infos=getBestWInfos(tmpMaze,player,Func.SquareFast);
 
 			myInfo=infos[player];
 			oppInfo=infos[oppId];
-		}else//後半
+		}else//å¾Œå�Š
 		{
 			RetVal[] infos=getBestWInfos(tmpMaze,player,Func.SquareFast);
 
@@ -668,24 +665,24 @@ RetVal[]bestInfos=null;
 		}
 
 		{
-			if(myInfo.S>oppInfo.S) {//面積勝ち状態
+			if(myInfo.S>oppInfo.S) {//é�¢ç©�å‹�ã�¡çŠ¶æ…‹
 				score=1;
 				if(oppInfo.S<tmpMaze.snakes[oppId].body.size()) {
 					score*=2;
 				}
-				else if(true) {score*=0;}//序盤はぐるぐるならないようにする
+				else if(true) {score*=0;}//åº�ç›¤ã�¯ã��ã‚‹ã��ã‚‹ã�ªã‚‰ã�ªã�„ã‚ˆã�†ã�«ã�™ã‚‹
 			}
-			if(myInfo.S<oppInfo.S) {//面積負け状態
+			if(myInfo.S<oppInfo.S) {//é�¢ç©�è² ã�‘çŠ¶æ…‹
 				score=-1;
 
 				if(myInfo.S<tmpMaze.snakes[player].body.size()) {
 					score*=2;
 				}
-				else if(true) {score*=0;}//序盤はぐるぐるならないようにする
+				else if(true) {score*=0;}//åº�ç›¤ã�¯ã��ã‚‹ã��ã‚‹ã�ªã‚‰ã�ªã�„ã‚ˆã�†ã�«ã�™ã‚‹
 			}
 		}
-		if(Aoki_eita1130.hameWin(tmpMaze, player))score+=1;
-		if(Aoki_eita1130.hameWin(tmpMaze, oppId))score-=1;
+		if(MyBot.hameWin(tmpMaze, player))score+=1;
+		if(MyBot.hameWin(tmpMaze, oppId))score-=1;
 
 		score*=200;
 		int tmpEateDepth=100;
@@ -731,11 +728,11 @@ RetVal[]bestInfos=null;
 		HashEntry hashEntry=HashTbl.get(k.hash);
 
 		if (hashEntry.depth%2!=depth%2) {
-			// 手番が違う。
+			// æ‰‹ç•ªã�Œé�•ã�†ã€‚
 			return teBuf;
 		}
 
-		// 局面が一致したと思われる
+		// å±€é�¢ã�Œä¸€è‡´ã�—ã�Ÿã�¨æ€�ã‚�ã‚Œã‚‹
 		Direction te=hashEntry.Best;
 		if (te!=null) {
 			if (k.canMove(SorE,te)) {
@@ -770,7 +767,7 @@ RetVal[]bestInfos=null;
 			e.Second=e.Best;
 		} else {
 			if (e.depth == depth) {
-				// ハッシュに残っている値の方が重要なので、登録をあきらめる
+				// ãƒ�ãƒƒã‚·ãƒ¥ã�«æ®‹ã�£ã�¦ã�„ã‚‹å€¤ã�®æ–¹ã�Œé‡�è¦�ã�ªã�®ã�§ã€�ç™»éŒ²ã‚’ã�‚ã��ã‚‰ã‚�ã‚‹
 				return;
 			}
 
@@ -797,7 +794,7 @@ RetVal[]bestInfos=null;
 
 	static boolean akirame=false;
 	public static long NegaAlphaBeta(int SorE, BitMaze k, long  alpha, long beta, int depth, int depthMax) {
-		if(akirame||System.currentTimeMillis()- Aoki_eita1130.startTime>threTime) {akirame=true;return -INF;}
+		if(akirame||System.currentTimeMillis()- MyBot.startTime>threTime) {akirame=true;return -INF;}
 
 
 		if(k.isShoutotsu()&&depth%2==0){
@@ -818,13 +815,13 @@ RetVal[]bestInfos=null;
 		}
 
 		if(depth==depthMax) {
-			long score= Aoki_eita1130.getScore(k,SorE);
+			long score= MyBot.getScore(k,SorE);
 			//myprintln("nega\t"+score);
 			return score;
 		}
 
 		if(depth==2) {
-			k.shallowScore[0]= Aoki_eita1130.getShallowScore(k, 0);
+			k.shallowScore[0]= MyBot.getShallowScore(k, 0);
 			k.shallowScore[1]=-k.shallowScore[0];
 		}
 
@@ -840,7 +837,7 @@ RetVal[]bestInfos=null;
 		}
 
 		long retval = -INF-1;
-		int teNum = 0;//行動できるかチェック
+		int teNum = 0;//è¡Œå‹•ã�§ã��ã‚‹ã�‹ãƒ�ã‚§ãƒƒã‚¯
 //
 //		for (Direction act:Thunder.MakeMoveFirst(SorE, depthMax, k)) {
 //			BitMaze kk=k.clone();
@@ -885,13 +882,13 @@ RetVal[]bestInfos=null;
 					alpha = retval;
 				}
 				if (retval >= beta) {
-					Aoki_eita1130.hashAdd(k, depthMax, retval, alpha, beta);
+					MyBot.hashAdd(k, depthMax, retval, alpha, beta);
 					return retval;
 				}
 			}
 		}
 		if (teNum == 0) {
-			// 負け
+			// è² ã�‘
 			return -INF;
 		}
 
@@ -912,8 +909,8 @@ RetVal[]bestInfos=null;
 	static long startTime;
 	static long threTime=500;//500;
 	public static Direction ITDeep(BitMaze k) {
-		int firstSIZE=10;//////////////////ここ重要。BISIZE-1より小さくしないとダメ
-		if(Aoki_eita1130.superWinner==0) {
+		int firstSIZE=10;//////////////////ã�“ã�“é‡�è¦�ã€‚BISIZE-1ã‚ˆã‚Šå°�ã�•ã��ã�—ã�ªã�„ã�¨ãƒ€ãƒ¡
+		if(MyBot.superWinner==0) {
 			BSIZE=60+1;
 		}else {
 			BSIZE=60+1;
@@ -921,10 +918,10 @@ RetVal[]bestInfos=null;
 		}
 
 
-		Aoki_eita1130.Best=new Direction[BSIZE][BSIZE];
-		for (int i = 0; i < Aoki_eita1130.BSIZE; i++) {
-			for (int j = 0; j < Aoki_eita1130.BSIZE; j++) {
-				Aoki_eita1130.Best[i][j] = null;
+		MyBot.Best=new Direction[BSIZE][BSIZE];
+		for (int i = 0; i < MyBot.BSIZE; i++) {
+			for (int j = 0; j < MyBot.BSIZE; j++) {
+				MyBot.Best[i][j] = null;
 			}
 		}
 
@@ -943,7 +940,7 @@ RetVal[]bestInfos=null;
 			//if(i%2==1)
 			{dir=tmpDir;}
 			searchedDepth=i;
-			if(System.currentTimeMillis()- Aoki_eita1130.startTime>threTime) {
+			if(System.currentTimeMillis()- MyBot.startTime>threTime) {
 
 				break;
 			}
@@ -962,7 +959,7 @@ RetVal[]bestInfos=null;
 	 */
 	@Override
 	public Direction chooseDirection(Snake snake, Snake opponent, Coordinate mazeSize, Coordinate apple) {
-		Aoki_eita1130.initTurn(apple);
+		MyBot.initTurn(apple);
 
 		BitMaze nowMaze=new BitMaze(snake,opponent,apple);
 		nowMaze.print();
@@ -971,7 +968,7 @@ RetVal[]bestInfos=null;
 		if(nowMaze.snakes[0].body.size()-nowMaze.snakes[1].body.size()>=2)superWinner=0;
 		if(nowMaze.snakes[1].body.size()-nowMaze.snakes[0].body.size()>=2)superWinner=1;
 
-		Direction bestDir= Aoki_eita1130.ITDeep(nowMaze.clone());
+		Direction bestDir= MyBot.ITDeep(nowMaze.clone());
 		//Direction bestDir=Thunder.NegaAlphaBeta(nowMaze.clone(),14);
 
 		if(bestDir==null) {
@@ -1021,12 +1018,12 @@ RetVal[]bestInfos=null;
 		Snake opp=new Snake( new Coordinate(5,13),mazeSize);
 
 
-Aoki_eita1130 aokieita1130gmailcom =new Aoki_eita1130();
+MyBot aokieita1130gmailcom =new MyBot();
 		aokieita1130gmailcom.initTurn(apple);
 BitMaze bmazeorg= aokieita1130gmailcom.new BitMaze(my.clone(),opp.clone(),new Coordinate(apple.x,apple.y));
 bmazeorg.print();
 
-System.err.println("isHame "+ Aoki_eita1130.hameWin(bmazeorg, 0));
+System.err.println("isHame "+ MyBot.hameWin(bmazeorg, 0));
 if(true) {return;}
 
 Direction bestd= aokieita1130gmailcom.chooseDirection(bmazeorg.snakes[0], bmazeorg.snakes[1], mazeSize, bmazeorg.apple);
@@ -1061,7 +1058,7 @@ Direction[][] oppDirections=new Direction[][]{
 for(int i=0;i<myDirections.length;i++){
 	Direction[] myds=myDirections[i];
 	Direction[] oppds=oppDirections[i];
-	aokieita1130gmailcom =new Aoki_eita1130();
+	aokieita1130gmailcom =new MyBot();
 	aokieita1130gmailcom.initTurn(apple);
 
 	BitMaze bmaze= aokieita1130gmailcom.new BitMaze(my.clone(),opp.clone(),new Coordinate(apple.x,apple.y));
@@ -1080,8 +1077,8 @@ for(int i=0;i<myDirections.length;i++){
 	myprintln("myS\t"+myinfo.S);
 	myprintln("appleDistance\t"+myinfo.appleDistance);
 	myprintln("orgAppleDistance\t"+myinfo.orgAppleDistance);
-	myprintln("myPreScore\t"+ Aoki_eita1130.getPerScoreAppleFast(bmaze, myinfo));
-	myprintln("oppPreScore\t"+ Aoki_eita1130.getPerScoreAppleFast(bmaze, oppinfo));
+	myprintln("myPreScore\t"+ MyBot.getPerScoreAppleFast(bmaze, myinfo));
+	myprintln("oppPreScore\t"+ MyBot.getPerScoreAppleFast(bmaze, oppinfo));
 	//myprintln("myScore\t"+Thunder.getScore(bmaze, 0));
 	//myprintln("oppScore\t"+Thunder.getScore(bmaze, 1));
 	myprintln();

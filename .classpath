@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/jython2.7.2/jython.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

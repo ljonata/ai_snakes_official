@@ -10,7 +10,7 @@ import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
 
-public class V_smirnov implements Bot {
+public class MyBot implements Bot {
     // by Vladislav Smirnov
     // Extends Bot_n_strygin by Nikita Strygin
 

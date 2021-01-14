@@ -9,7 +9,7 @@ import snakes.Coordinate;
 import snakes.Direction;
 import snakes.Snake;
 
-public class A_zhuchkov implements Bot {
+public class MyBot implements Bot {
     private final Random rnd = new Random();
     private static final Direction[] DIRECTIONS = new Direction[]{Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
 

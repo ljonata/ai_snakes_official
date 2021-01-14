@@ -9,7 +9,10 @@ import snakes.stats.Duel;
 import snakes.stats.Results;
 
 /**
- * Implements tournament of the snake game with several rounds
+ * Implements tournament of the snake game with several rounds. To run the
+ * tournament in background and get them saved you should run
+ * PlayTournamentBackgroundMain.java with names of bots in arguments ( for ex.
+ * a_zhuchkov.MyBot b_j_grooten.MyBot bertram_timo.MyBot )
  */
 public class PlayTournamentBackgroundMain {
 	// private static final String LOG_DIRECTORY_PATH = "logs";

@@ -18,7 +18,7 @@ import snakes.Snake;
  * on 3 May 2020, for the AI Snakes competition
  *
  */
-public class B_j_grooten implements Bot, Runnable {
+public class MyBot implements Bot, Runnable {
     private static final Direction[] DIRECTIONS = new Direction[]{Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
 
     // for BFS
